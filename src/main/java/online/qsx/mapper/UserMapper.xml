@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="online.qsx.mapper.UserMapper">
+
+    <resultMap type="User" id="BaseResultMap">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <collection property="roles" resultMap="RoleResultMap"></collection>
+    </resultMap>
+
+    <resultMap type="Role" id="RoleResultMap">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <collection property="users" resultMap="BaseResultMap"></collection>
+        <collection property="jurisdictions" resultMap="JurisdictionResultMap"></collection>
+    </resultMap>
+
+    <resultMap type="Jurisdiction" id="JurisdictionResultMap">
+        <id column="id" property="id"/>
+        <result column="content" property="content"/>
+        <collection property="roles" resultMap="RoleResultMap"></collection>
+    </resultMap>
+
+    <select id="getUserByName" resultMap="BaseResultMap" parameterType="String">
+        SELECT
+          *
+        FROM
+        user u, role r, user_roles ur,jurisdiction j,role_jurisdictions rj
+        WHERE u.id = ur.user_id AND ur.roles_id = r.id AND r.id=rj.role_id AND j.id=rj.jurisdictions_id
+        AND u.username = #{username}
+    </select>
+
+    <select id="saveUser" resultMap="BaseResultMap" parameterType="User">
+         insert into user(username,password)
+        value( #{username},#{password})
+    </select>
+</mapper>

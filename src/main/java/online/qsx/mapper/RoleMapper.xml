@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="online.qsx.mapper.RoleMapper">
+
+    <resultMap type="Role" id="RoleResultMap">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <collection property="users" resultMap="BaseResultMap"></collection>
+        <collection property="jurisdictions" resultMap="JurisdictionResultMap"></collection>
+    </resultMap>
+
+    <resultMap type="Jurisdiction" id="JurisdictionResultMap">
+        <id column="id" property="id"/>
+        <result column="content" property="content"/>
+        <collection property="roles" resultMap="RoleResultMap"></collection>
+    </resultMap>
+
+    <select id="getRoleByName" resultMap="RoleResultMap" parameterType="String">
+        SELECT
+          *
+        FROM
+        role where name =#{name}
+    </select>
+
+    <select id="saveRoleByName" resultMap="RoleResultMap" parameterType="String">
+        insert into role(name)
+        value( #{name})
+    </select>
+</mapper>
